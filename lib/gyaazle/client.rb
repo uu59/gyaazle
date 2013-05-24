@@ -67,6 +67,7 @@ module Gyaazle
           "Content-Type" =>  "multipart/related; boundary=___#{Time.now.to_f}___",
         }
       )
+      # Note: deeplink is https://drive.google.com/uc?export=view&id={fileId}
       MultiJson.load(response.body, :symbolize_keys => true)
     end
 
