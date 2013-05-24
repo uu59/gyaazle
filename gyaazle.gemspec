@@ -8,9 +8,9 @@ Gem::Specification.new do |spec|
   spec.version       = Gyaazle::VERSION
   spec.authors       = ["uu59"]
   spec.email         = ["k@uu59.org"]
-  spec.description   = %q{TODO: Write a gem description}
-  spec.summary       = %q{TODO: Write a gem summary}
-  spec.homepage      = ""
+  spec.description   = %q{Gyazo like image uploader to Google Drive}
+  spec.summary       = %q{Gyazo like image uploader to Google Drive}
+  spec.homepage      = "https://github.com/uu59/gyaazle"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)
