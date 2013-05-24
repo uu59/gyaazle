@@ -20,6 +20,39 @@ Or install it yourself as:
 
     $ gyaazle [options] <file1> <file2> ..
 
+At first time execute, you should authorize Gyaazle app by browser.
+
+## Setting
+
+`gyaazle -e` for open config file by $EDITOR.
+
+### Permissions
+
+Add "permissions" object like below:
+
+```json
+{
+  "access_token": "********",
+  "token_type": "Bearer",
+  "expires_in": 3600,
+  ...
+  "permissions": {
+    "role": "reader",
+    "type": "domain",
+    "value": "uu59.org",
+    "withLink": true,
+    "additionalRoles": [
+      "commenter"
+    ]
+  }
+}
+```
+
+Learn more:
+
+* <https://developers.google.com/drive/manage-sharing>
+* <https://developers.google.com/drive/v2/reference/permissions#resource>
+
 ## Contributing
 
 1. Fork it

@@ -72,13 +72,15 @@ module Gyaazle
     end
 
     def set_permissions(file_id, permissions = nil)
-      json = MultiJson.dump(permissions || {
-        :role => "reader",
-        :type => "#{"anyone"}",
-        :value => "#{"me"}",
-        :withLink => "true",
-        :additionalRoles => ["commenter"],
-      })
+      json = MultiJson.dump(
+        permissions || credentials[:permissions] || {
+          :role => "reader",
+          :type => "#{"anyone"}",
+          :value => "#{"me"}",
+          :withLink => "true",
+          :additionalRoles => ["commenter"],
+        }
+      )
       client.post_content(
         "https://www.googleapis.com/drive/v2/files/#{file_id}/permissions",
         json,
