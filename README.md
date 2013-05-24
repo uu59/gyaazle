@@ -1,6 +1,6 @@
 # Gyaazle
 
-TODO: Write a gem description
+Gyazo like image uploader that upload image(s) to Google Drive.
 
 ## Installation
 
@@ -18,7 +18,7 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+    $ gyaazle [options] <file1> <file2> ..
 
 ## Contributing
 
