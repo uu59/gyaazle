@@ -1,6 +1,5 @@
 #!/usr/bin/env ruby
 
 require File.expand_path("../../lib/gyaazle.rb", __FILE__)
-require "gyaazle"
 
 Gyaazle::CLI.new(ARGV).run!
