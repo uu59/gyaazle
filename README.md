@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/uu59/gyaazle.png?branch=master)](https://travis-ci.org/uu59/gyaazle)
+[![Coverage Status](https://coveralls.io/repos/uu59/gyaazle/badge.png?branch=master)](https://coveralls.io/r/uu59/gyaazle)
+
 # Gyaazle
 
 Gyazo like image uploader that upload image(s) to Google Drive.
