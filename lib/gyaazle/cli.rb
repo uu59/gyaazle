@@ -1,5 +1,7 @@
 module Gyaazle
   class CLI
+    attr_reader :config, :client
+
     def initialize(argv)
       @argv = argv
       @opts = Trollop.options(@argv) do
@@ -35,19 +37,15 @@ TEXT
     end
 
     def upload
-      if @config.load.nil? || @config.load[:refresh_token].nil?
-        credentials = initialize_tokens
-      else
-        @client.refresh_token!
-        credentials = @client.credentials
-      end
+      check_credentials!
+
       @argv.each do |file|
-        fileobj = @client.upload(file)
+        fileobj = client.upload(file)
         puts "#{file}: #{fileobj[:alternateLink]}"
         if @opts[:open]
           Launchy.open fileobj[:alternateLink]
         end
-        @client.set_permissions(fileobj[:id])
+        client.set_permissions(fileobj[:id])
       end
     end
 
@@ -64,21 +62,29 @@ TEXT
     end
 
     def edit_config
-      system(ENV["EDITOR"], @config.file)
+      system(ENV["EDITOR"], config.file)
       puts "Updated!"
     end
 
     def initialize_tokens
-      tokens = @client.get_tokens(authorize)
-      @config.save(tokens)
+      tokens = client.get_tokens(authorize)
+      config.save(tokens)
       tokens
     end
 
     def authorize
       puts "Open this link by your browser, and authorize"
-      puts @client.authorize_url
+      puts client.authorize_url
       print "Paste code here: "
       STDIN.gets.strip
+    end
+
+    def check_credentials!
+      if config.load.nil? || config.load[:refresh_token].nil?
+        initialize_tokens
+      else
+        client.refresh_token!
+      end
     end
   end
 end
