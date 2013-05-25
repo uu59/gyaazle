@@ -41,7 +41,11 @@ TEXT
 
       @argv.each do |file|
         fileobj = client.upload(file)
-        puts "#{file}: #{fileobj[:alternateLink]}"
+        puts "#{file}:"
+        puts "  * url: #{fileobj[:alternateLink]}"
+        puts "  * download: #{fileobj[:downloadUrl]}"
+        puts "  * deep link: https://drive.google.com/uc?export=view&id=#{fileobj[:id]}"
+        puts
         if @opts[:open]
           Launchy.open fileobj[:alternateLink]
         end
