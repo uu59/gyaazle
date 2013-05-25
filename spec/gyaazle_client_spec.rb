@@ -26,9 +26,7 @@ describe Gyaazle::Client do
   describe "#folder_id" do
     context "Gyaazle folder does exists" do
       before do
-        client.stub(:credentials).and_return({
-          :folder_id => folder_id
-        })
+        config.update(:folder_id => folder_id)
         client.stub(:get_file_info).and_return({
           :id => folder_id,
           :labels => {
@@ -45,7 +43,7 @@ describe Gyaazle::Client do
 
     context "Gyaazle folder does not exists" do
       before do
-        client.stub(:credentials).and_return({})
+        config.update(:folder_id => nil)
       end
 
       it "invoke #create_folder" do
@@ -56,9 +54,7 @@ describe Gyaazle::Client do
 
     context "Gyaazle folder is in trash" do
       before do
-        client.stub(:credentials).and_return({
-          :folder_id => folder_id
-        })
+        config.update(:folder_id => folder_id)
         client.stub(:get_file_info).and_return({
           :id => folder_id,
           :labels => {
