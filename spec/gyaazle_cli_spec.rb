@@ -89,5 +89,27 @@ describe Gyaazle::CLI do
       cli.config.load.should == token
     end
   end
+
+  describe "#upload" do
+    let(:files) { %w!foo.jpg! }
+    let(:cli) { Gyaazle::CLI.new(files) }
+
+    before do
+      cli.stub(:check_credentials!)
+
+      @orig_stdout = $stdout
+      $stdout = File.new("/dev/null", "w")
+    end
+
+    after do
+      $stdout = @orig_stdout
+    end
+
+    it "invoke client.upload" do
+      cli.client.should_receive(:upload).with(files.first).and_return(:alternateLink => "dummy")
+      cli.client.should_receive(:set_permissions)
+      cli.upload
+    end
+  end
 end
 
