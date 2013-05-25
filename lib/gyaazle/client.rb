@@ -52,7 +52,7 @@ module Gyaazle
         'https://www.googleapis.com/upload/drive/v2/files?uploadType=multipart',
         body,
         {
-          "Authorization" => "#{credentials[:token_type]} #{credentials[:access_token]}",
+          "Authorization" => authorization_header_value,
           "Content-Type" =>  "multipart/related; boundary=___#{Time.now.to_f}___",
         }
       )
@@ -74,7 +74,7 @@ module Gyaazle
         "https://www.googleapis.com/drive/v2/files/#{file_id}/permissions",
         json,
         {
-          "Authorization" => "#{credentials[:token_type]} #{credentials[:access_token]}",
+          "Authorization" => authorization_header_value,
           'Content-Type' => 'application/json;charset=utf-8',
         }
       )
@@ -83,13 +83,17 @@ module Gyaazle
     def get_file_info(file_id)
       json = agent.get(
         "https://www.googleapis.com/drive/v2/files/#{file_id}",
-        {},
+        nil,
         {
-          "Authorization" => "#{credentials[:token_type]} #{credentials[:access_token]}",
+          "Authorization" => authorization_header_value,
         }
       ).body
 
       MultiJson.load(json, :symbolize_keys => true)
+    end
+
+    def authorization_header_value
+      "#{credentials[:token_type]} #{credentials[:access_token]}"
     end
 
     def folder_id
@@ -113,7 +117,7 @@ module Gyaazle
           :parents => [{:id => "root"}],
         }),
         {
-          "Authorization" => "#{credentials[:token_type]} #{credentials[:access_token]}",
+          "Authorization" => authorization_header_value,
           'Content-Type' => 'application/json;charset=utf-8',
         }
       )

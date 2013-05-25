@@ -65,8 +65,8 @@ TEXT
       system(ENV["EDITOR"], config.file)
     end
 
-    def initialize_tokens
-      tokens = client.get_tokens(authorize)
+    def initialize_tokens(verifier = nil)
+      tokens = client.get_tokens(verifier || authorize)
       config.save(tokens)
       tokens
     end
@@ -80,7 +80,7 @@ TEXT
 
     def check_credentials!
       if config.load.nil? || config.load[:refresh_token].nil?
-        initialize_tokens
+        initialize_tokens(authorize)
       else
         client.refresh_token!
       end

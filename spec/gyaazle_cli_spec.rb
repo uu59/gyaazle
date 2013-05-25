@@ -3,8 +3,12 @@
 require "spec_helper"
 
 describe Gyaazle::CLI do
+  let(:cli) { Gyaazle::CLI.new([]) }
+
   describe "ensure oauth token" do
-    let(:cli) { Gyaazle::CLI.new([]) }
+    before do
+      cli.stub(:authorize).and_return("verification code")
+    end
 
     it "invoke #check_credentials! before #upload" do
       cli.should_receive(:check_credentials!)
@@ -73,6 +77,16 @@ describe Gyaazle::CLI do
         cli.should_receive(:capture)
         cli.run!
       end
+    end
+  end
+
+  describe "#initialize_tokens" do
+    let(:token) { {:foo => 1, :bar => 44} }
+
+    it "save response to config file" do
+      cli.client.stub(:get_tokens).and_return(token)
+      cli.initialize_tokens("code")
+      cli.config.load.should == token
     end
   end
 end

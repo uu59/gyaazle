@@ -17,6 +17,7 @@ end
 Bundler.require :default, :test
 require "rspec-expectations"
 require "rspec/matchers/built_in/be"
+require "webmock/rspec"
 
 Dir["./spec/support/**/*.rb"].each{|file| require file }
 
