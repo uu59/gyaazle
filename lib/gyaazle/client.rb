@@ -7,17 +7,6 @@ module Gyaazle
       @agent = HTTPClient.new
     end
 
-    def authorize(code)
-      json = agent.post_content("https://accounts.google.com/o/oauth2/token", {
-        :code => code,
-        :client_id => config.id,
-        :client_secret => config.secret,
-        :redirect_uri => "urn:ietf:wg:oauth:2.0:oob",
-        :grant_type => "authorization_code",
-      })
-      MultiJson.load(json, :symbolize_keys => true)
-    end
-
     def authorize_url
       url = "https://accounts.google.com/o/oauth2/auth?client_id=#{config.id}&response_type=code&redirect_uri=urn:ietf:wg:oauth:2.0:oob&scope=https://www.googleapis.com/auth/drive"
       Nokogiri::HTML.parse(agent.get(url).body).at('a').attributes["href"].to_s
