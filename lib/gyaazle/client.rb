@@ -1,14 +1,14 @@
 module Gyaazle
   class Client
-    attr_reader :client, :config
+    attr_reader :agent, :config
 
     def initialize(config)
       @config = config
-      @client = HTTPClient.new
+      @agent = HTTPClient.new
     end
 
     def authorize(code)
-      json = client.post_content("https://accounts.google.com/o/oauth2/token", {
+      json = agent.post_content("https://accounts.google.com/o/oauth2/token", {
         :code => code,
         :client_id => config.id,
         :client_secret => config.secret,
@@ -20,11 +20,11 @@ module Gyaazle
 
     def authorize_url
       url = "https://accounts.google.com/o/oauth2/auth?client_id=#{config.id}&response_type=code&redirect_uri=urn:ietf:wg:oauth:2.0:oob&scope=https://www.googleapis.com/auth/drive"
-      Nokogiri::HTML.parse(client.get(url).body).at('a').attributes["href"].to_s
+      Nokogiri::HTML.parse(agent.get(url).body).at('a').attributes["href"].to_s
     end
 
     def get_tokens(verifier)
-      client.post_content("https://accounts.google.com/o/oauth2/token",{
+      agent.post_content("https://accounts.google.com/o/oauth2/token",{
         :code => verifier,
         :client_id => config.id,
         :client_secret => config.secret,
@@ -34,7 +34,7 @@ module Gyaazle
     end
 
     def refresh_token!
-      json = client.post("https://accounts.google.com/o/oauth2/token", {
+      json = agent.post("https://accounts.google.com/o/oauth2/token", {
         :refresh_token => credentials[:refresh_token],
         :client_id => config.id,
         :client_secret => config.secret,
@@ -59,7 +59,7 @@ module Gyaazle
         },
       ]
 
-      response = client.post(
+      response = agent.post(
         'https://www.googleapis.com/upload/drive/v2/files?uploadType=multipart',
         body,
         {
@@ -81,7 +81,7 @@ module Gyaazle
           :additionalRoles => ["commenter"],
         }
       )
-      client.post_content(
+      agent.post_content(
         "https://www.googleapis.com/drive/v2/files/#{file_id}/permissions",
         json,
         {
@@ -92,7 +92,7 @@ module Gyaazle
     end
 
     def get(file_id)
-      json = client.get(
+      json = agent.get(
         "https://www.googleapis.com/drive/v2/files/#{file_id}",
         {},
         {
@@ -116,7 +116,7 @@ module Gyaazle
     end
 
     def create_folder(name)
-      json = client.post_content(
+      json = agent.post_content(
         "https://www.googleapis.com/drive/v2/files",
         MultiJson.dump({
           :title => name,
