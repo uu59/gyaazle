@@ -80,7 +80,7 @@ module Gyaazle
       )
     end
 
-    def get(file_id)
+    def get_file_info(file_id)
       json = agent.get(
         "https://www.googleapis.com/drive/v2/files/#{file_id}",
         {},
@@ -96,7 +96,7 @@ module Gyaazle
       id = credentials[:folder_id]
       return create_folder("Gyaazle") unless id
 
-      folder = get(id)
+      folder = get_file_info(id)
       if !folder[:id] || folder[:labels][:trashed]
         create_folder("Gyaazle") 
       else
