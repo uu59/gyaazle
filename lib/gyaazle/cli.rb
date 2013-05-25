@@ -63,7 +63,6 @@ TEXT
 
     def edit_config
       system(ENV["EDITOR"], config.file)
-      puts "Updated!"
     end
 
     def initialize_tokens

@@ -12,7 +12,6 @@ describe Gyaazle::CLI do
     end
 
     context "config file does not exists" do
-      let(:cli) { Gyaazle::CLI.new(%w!--config /tmp/does_not_exists_path!) }
       before do
         cli.config.stub(:load).and_return(nil)
       end
@@ -24,7 +23,6 @@ describe Gyaazle::CLI do
     end
 
     context "config file is sane" do
-      let(:cli) { Gyaazle::CLI.new(%w!--config /tmp/does_not_exists_path!) }
       before do
         cli.config.stub(:load).and_return(:client_id => "id", :client_secret => "secret", :refresh_token => "refresh")
       end
@@ -55,11 +53,26 @@ describe Gyaazle::CLI do
       end
     end
 
-    it "--config option set config file" do
-      file = File.join("/tmp", rand.to_s)
-      cli = Gyaazle::CLI.new(%W!--config #{file}!)
-      cli.config.file.should == file
-      File.unlink(file) if File.exists?(file)
+    context "--config filepath" do
+      let(:file) { File.join("/tmp", rand.to_s) }
+      let(:cli) { Gyaazle::CLI.new(%W!--config #{file}!) }
+
+      it "set config file" do
+        cli.config.file.should == file
+        File.unlink(file) if File.exists?(file)
+      end
+    end
+
+    context "--capture" do
+      let(:cli) { Gyaazle::CLI.new(%W!--capture!) }
+      before do
+        cli.stub(:upload)
+      end
+
+      it "invoke #capture" do
+        cli.should_receive(:capture)
+        cli.run!
+      end
     end
   end
 end
