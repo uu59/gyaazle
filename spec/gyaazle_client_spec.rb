@@ -35,7 +35,7 @@ describe Gyaazle::Client do
         })
       end
 
-      it "invoke #create_folder" do
+      it "not invoke #create_folder" do
         client.should_not_receive(:create_folder)
         client.folder_id.should == folder_id
       end
