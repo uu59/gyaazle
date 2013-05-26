@@ -24,7 +24,7 @@ describe Gyaazle::Client do
   end
 
   describe "#folder_id" do
-    context "Gyaazle folder does exists" do
+    context "folder_id given" do
       before do
         config.update(:folder_id => folder_id)
         client.stub(:get_file_info).and_return({
@@ -41,7 +41,7 @@ describe Gyaazle::Client do
       end
     end
 
-    context "Gyaazle folder does not exists" do
+    context "folder_id does not given" do
       before do
         config.update(:folder_id => nil)
       end
@@ -52,7 +52,7 @@ describe Gyaazle::Client do
       end
     end
 
-    context "Gyaazle folder is in trash" do
+    context "folder_id given but its in trash" do
       before do
         config.update(:folder_id => folder_id)
         client.stub(:get_file_info).and_return({
