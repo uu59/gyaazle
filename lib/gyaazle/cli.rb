@@ -29,16 +29,16 @@ TEXT
       if @opts[:edit]
         edit_config
       else
-        if @opts[:capture]
+        if @opts[:capture] || @argv.empty?
           @argv = [capture]
         end
+
+        check_credentials!
         upload
       end
     end
 
     def upload
-      check_credentials!
-
       @argv.each do |file|
         fileobj = client.upload(file)
         puts "#{file}:"
@@ -55,13 +55,7 @@ TEXT
 
     def capture
       tmpfile = "/tmp/gyaazle_capture_#{Time.now.strftime("%F %T")}.png"
-      capture_cmd = case RUBY_PLATFORM
-        when /darwin/
-          "screencapture -i '#{tmpfile}'"
-        else
-          "import '#{tmpfile}'"
-      end
-      system capture_cmd
+      system capture_cmd(tmpfile)
       tmpfile
     end
 
@@ -87,6 +81,17 @@ TEXT
         initialize_tokens(authorize)
       else
         client.refresh_token!
+      end
+    end
+
+    private
+
+    def capture_cmd(save_to)
+      case RUBY_PLATFORM
+        when /darwin/
+          "screencapture -i '#{save_to}'"
+        else
+          "import '#{save_to}'"
       end
     end
   end
