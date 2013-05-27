@@ -1,3 +1,5 @@
+require "fileutils"
+
 require "httpclient"
 require "multi_json"
 require "nokogiri"
