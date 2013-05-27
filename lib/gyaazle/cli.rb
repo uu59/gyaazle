@@ -60,7 +60,11 @@ TEXT
     end
 
     def edit_config
-      system(ENV["EDITOR"], config.file)
+      tmpfile = Tempfile.new("gyaazle-")
+      tmpfile.close
+      FileUtils.cp(config.file, tmpfile.path)
+      system(ENV["EDITOR"], tmpfile.path)
+      FileUtils.cp(tmpfile.path, config.file)
     end
 
     def initialize_tokens(verifier = nil)

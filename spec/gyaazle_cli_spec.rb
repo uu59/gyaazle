@@ -135,7 +135,7 @@ describe Gyaazle::CLI do
     let(:cli) { Gyaazle::CLI.new(%W!-e --config #{conf}!) }
 
     it "invoke #system with $EDITOR" do
-      cli.should_receive(:system).with(ENV["EDITOR"], conf)
+      cli.should_receive(:system).at_least(1).with(ENV["EDITOR"], anything)
       cli.edit_config
       File.unlink(conf) if File.exists?(conf)
     end
