@@ -61,23 +61,28 @@ module Gyaazle
     end
 
     def set_permissions(file_id, permissions = nil)
-      json = MultiJson.dump(
-        permissions || credentials[:permissions] || {
-          :role => "reader",
-          :type => "#{"anyone"}",
-          :value => "#{"me"}",
-          :withLink => "true",
-          :additionalRoles => ["commenter"],
-        }
-      )
-      agent.post_content(
-        "https://www.googleapis.com/drive/v2/files/#{file_id}/permissions",
-        json,
-        {
-          "Authorization" => authorization_header_value,
-          'Content-Type' => 'application/json;charset=utf-8',
-        }
-      )
+      permissions ||= credentials[:permissions] || {
+        # Reference:
+        # * https://developers.google.com/drive/manage-sharing
+        # * https://developers.google.com/drive/v2/reference/permissions#resource
+        :role => "reader",
+        :type => "anyone",
+        :value => "me",
+        :withLink => "true",
+        :additionalRoles => ["commenter"],
+      }
+      permissions = [permissions] if permissions.class != Array
+      permissions.each do |perm|
+        json = MultiJson.dump(perm)
+        agent.post_content(
+          "https://www.googleapis.com/drive/v2/files/#{file_id}/permissions",
+          json,
+          {
+            "Authorization" => authorization_header_value,
+            'Content-Type' => 'application/json;charset=utf-8',
+          }
+        )
+      end
     end
 
     def get_file_info(file_id)
