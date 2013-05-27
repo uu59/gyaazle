@@ -25,6 +25,16 @@ Dir["./spec/support/**/*.rb"].each{|file| require file }
 require File.expand_path("../../lib/gyaazle.rb", __FILE__)
 
 RSpec.configure do |config|
+  def silence
+    @orig_stdout = $stdout
+    @orig_stderr = $stderr
+    $stdout = File.new("/dev/null", "w")
+    $stderr = File.new("/dev/null", "w")
+    yield
+  ensure
+    $stdout = @orig_stdout
+    $stderr = @orig_stderr
+  end
 end
 # -- coding: utf-8
 

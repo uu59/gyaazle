@@ -114,19 +114,14 @@ describe Gyaazle::CLI do
 
     before do
       cli.stub(:check_credentials!)
-
-      @orig_stdout = $stdout
-      $stdout = File.new("/dev/null", "w")
-    end
-
-    after do
-      $stdout = @orig_stdout
     end
 
     it "invoke client.upload" do
       cli.client.should_receive(:upload).with(files.first).and_return(:alternateLink => "dummy")
       cli.client.should_receive(:set_permissions)
-      cli.upload
+      silence do
+        cli.upload
+      end
     end
   end
 
@@ -136,7 +131,9 @@ describe Gyaazle::CLI do
 
     it "invoke #system with $EDITOR" do
       cli.should_receive(:system).at_least(1).with(ENV["EDITOR"], anything)
-      cli.edit_config
+      silence do
+        cli.edit_config
+      end
       File.unlink(conf) if File.exists?(conf)
     end
   end

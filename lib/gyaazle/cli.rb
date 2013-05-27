@@ -64,7 +64,13 @@ TEXT
       tmpfile.close
       FileUtils.cp(config.file, tmpfile.path)
       system(ENV["EDITOR"], tmpfile.path)
-      FileUtils.cp(tmpfile.path, config.file)
+      begin
+        MultiJson.load File.read(tmpfile.path)
+        FileUtils.cp(tmpfile.path, config.file)
+      rescue MultiJson::LoadError => e
+        $stderr.puts e.message
+        $stderr.puts "Does not saved"
+      end
     end
 
     def initialize_tokens(verifier = nil)
