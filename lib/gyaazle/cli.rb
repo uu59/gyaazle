@@ -29,11 +29,12 @@ TEXT
       if @opts[:edit]
         edit_config
       else
+        check_credentials!
+
         if @opts[:capture] || @argv.empty?
           @argv = [capture]
         end
 
-        check_credentials!
         upload
       end
     end
