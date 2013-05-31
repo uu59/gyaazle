@@ -102,7 +102,16 @@ TEXT
         when /darwin/
           "screencapture -i '#{save_to}'"
         else
-          "import '#{save_to}'"
+          case
+          when system('which import > /dev/null')
+            "import '#{save_to}'"
+            
+          when system('which gm > /dev/null')
+            "gm import '#{save_to}'"
+
+          else
+            raise "You should install ImageMagick or GraphicsMagick "
+          end
       end
     end
   end
